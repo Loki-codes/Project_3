@@ -1,13 +1,13 @@
-# Project_2
+# Project_3
 
 Group2
 Kevin Sheekey
 Kyle Pavelka
-Matt brown
+Reesh Gandhi
 Meriane Franco
 Ravi Patel
 
-Greener stocks
+Tomorrow's Stocks
 
   This project was our attempt at importing important information concerning the S&P 500 and using that information to assist anyone looking to learn mora about the 
 current and possibly future status of stock prices.
