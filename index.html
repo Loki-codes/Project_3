@@ -25,25 +25,11 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
 
-        <select id="selDataset" onchange="optionChanged(this.value)">
-          <option value="" >S&P 500 Stock Companies (select one)</option>
-        </select>
 
-        <!-- <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            All Charts
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="./html_files/candlestick.html">Candlestick</a>
-            <a class="dropdown-item" href="./html_files/predictions.html">Predictions</a>
-            <a class="dropdown-item" href="./html_files/predictions_bc.html">Predictions by % Change</a>
-          </div>
-        </li> -->
         <li class="nav-item">
-          <a class="nav-link" href="./html_files/tree_map.html">Tree Map (Home)</a>
+          <a class="nav-link" href="./html_files/predictions.html">Predictions</a>
         </li>
-              <li class="nav-item">
+        <li class="nav-item">
           <a class="nav-link" href="./html_files/data.html">Data</a>
         </li>
         <li class="nav-item">
@@ -51,61 +37,84 @@
         </li>
       </ul>
     </div>
+
+
+
   </nav>
 
-
   <!-- Create the overall grid -->
-  <div class="container">
+  <div class="container-lg">
     <!-- Row0 -->
     <section class="row">
-      <div class="col-md-12">
+      <div class="col-md-2">
+        <!-- kevin's drop down -->
+        <select id="selDataset" onchange="optionChanged(this.value)">
+          <option value="">Select Sector</option>
+        </select>
+
+        <select id="selDataset2" onchange="optionChanged(this.value)">
+          <option value="">Select Ticker</option>
+        </select>
+      </div>
+      <!-- kevin's drop down end   -->
+
+
+      <div class="col-md-8">
 
         <h1 id="main_title">SPX500 Insights</h1>
 
       </div>
 
+      <section class="row">
+        <div class="col-md-12" id="picture-treemap">
+          <img src="../Resources/treemapravi.jpg">
 
-    
-    <section>
-    <div class="col-md-12">
-      <img src="" id="image" />
-      <img src="" id="image3" />
-    </div>
+
+        </div>
+      </section>
+    </section>
   </div>
+
+
+  <div class="col-md-12">
+    <img src="" id="image" />
+    <img src="" id="image3" />
+  </div>
+
   <div class="row">
     <div class="col-md-6">
       <div id="candlestick"></div>
     </div>
-  <p>
+    <p>
     <div class="col-md-6">
       <div id="predictor"></div>
     </div>
-  </p>
-  <p>
+    </p>
+    <p>
     <div class="col-md-6">
       <div id="bar"></div>
     </div>
-  </p>
-  <p>
+    </p>
+    <p>
     <div class="col-md-6">
       <div id="pie"></div>
     </div>
-  </p>
-  <p>
+    </p>
+    <p>
     <div class="col-md-12">
       <div id="static"></div>
     </div>
-  </p>
-  
+    </p>
+
   </div>
-</div>
+  </div>
 
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src="Static/js/PlotlyCandle.js"></script>
-<!-- <script src="/Static/data/stockInfo.json"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="Static/js/PlotlyCandle.js"></script>
+  <!-- <script src="/Static/data/stockInfo.json"></script> -->
 
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

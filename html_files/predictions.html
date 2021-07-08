@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-black">
 
     <a class="navbar-brand" href="../index.html"><img src="../Resources/logo_gs_color.png" id="stock_logo"
         alt="Greener Stocks"></a>
@@ -25,28 +25,9 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
 
-        <li>
-          <select id="selDataset" onchange="optionChanged(this.value)">
-            <option value="" >S&P 500 Stock Companies (select one)</option>
-          </select>
-        </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            All Charts
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="candlestick.html">Candlestick</a>
-            <a class="dropdown-item" href="predictions.html">Predictions</a>
-            <a class="dropdown-item" href="predictions_bc.html">Predictions by % Change</a>
-          </div>
-        </li>
         <li class="nav-item">
-          <a class="nav-link" href="tree_map.html">Tree Map</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://greener-stocks-words.herokuapp.com/">News WC</a>
+          <a class="nav-link" href="predictions.html">Predictions</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="data.html">Data</a>
@@ -56,56 +37,65 @@
         </li>
       </ul>
     </div>
+
   </nav>
 
+ <!-- Create the overall grid -->
+ <div class="container-lg">
+  <!-- Row0 -->
+  <section class="row">
+    <div class="col-md-2">
+      <!-- kevin's drop down -->
+      <select id="selDataset" onchange="optionChanged(this.value)">
+        <option value="">Select Sector</option>
+      </select>
+
+      <select id="selDataset2" onchange="optionChanged(this.value)">
+        <option value="">Select Ticker</option>
+      </select>
+    </div>
+    <!-- kevin's drop down end   -->
 
 
-   <!-- Create the overall grid -->
-   <div class="container" style="background-color: rgb(236, 247, 236);">
-    <!-- Row0 -->
+    <div class="col-md-8">
+
+      <h1 id="main_title">Prediction SPX Next Days (to be edited)</h1>
+
+    </div>
+    
     <section class="row">
-      <div class="col-md-12">
-        <h1 id="main_title">Predictions</h1>
-
-        <p>In this section you will find a highly scientific, highly classified, pending-patent-pending mathematical formula to predict what the next month closing price will be. 
-          We took the closing prices from the previous 5 months leading up to the current closing price(6moC) to calculate what the closing price of the 7th month would be.
-          Choose a stock above to see what we here at Greener Stocks predict!
+      <div class="col-md-12" id= "picture-treemap">
+        <p>
+          The chart will be here - Machine learning part, the treemap will go away.
         </p>
-
-
-        <div class="row">
-          <div class="col-md-12">
-            <div id="predictor"></div>
-            <div id="reset"></div>
-          </div>
-        </div>
-        
+        <img src="../Resources/treemapravi.jpg" >
+       
 
       </div>
 
-
-    </section>
-
-    <!-- sunburst here? -->
+</div>
 
 
 
-  </div>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="../Static/js/predictions.js"></script>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="Static/js/PlotlyCandle.js"></script>
+    <!-- <script src="/Static/data/stockInfo.json"></script> -->
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"></script>
 
 </body>
 

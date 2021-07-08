@@ -2,15 +2,50 @@
 height: 50px;
 width: 100px;
 float: left; 
-margin-left: 10px;
+margin-left: 0px;
 margin-right: 20px;
 
 }
 
-.navbar{
-    height: 50px;
+#picture-treemap{
+    margin-left: 150px
 }
 
+.container-lg{
+    display: flex;
+    justify-content: center;
+}
+
+#selDataset{
+    text-align: left;
+    font-size: 15px;
+    color:rgb(236, 247, 236);
+    height: 50px;
+    width: 130px;
+    margin-left: 20px;
+    background-color: black;
+
+}
+
+#selDataset2{
+    text-align: left;
+    font-size: 15px;
+    color:rgb(236, 247, 236);
+    height: 50px;
+    width: 130px;
+    margin-left: 20px;
+    background-color: black;
+}
+
+.navbar{
+    height: 70px;
+}
+
+.form-check{
+    text-align: left;
+    font-size: 15px;
+    color:rgb(236, 247, 236)
+}
 #nav-item{
     text-align: center;
     font-size: 20px;
@@ -28,7 +63,9 @@ body{
     position: relative;
 }
 
-.fullscreen { 
+
+
+/* .fullscreen { 
     background: url("../../Resources/leogif.gif") no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -38,7 +75,7 @@ body{
 
 .removeFS{
     
-}
+} */
 
 #who-we-are{
     height: 140px;
@@ -116,7 +153,7 @@ margin-right: 20px;
 
 
 
-/* Table Styles */
+/* Table Styles start*/
 
 .table-wrapper{
     margin: 10px 70px 70px;
