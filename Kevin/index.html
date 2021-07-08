@@ -10,7 +10,7 @@
   <!-- <link rel="stylesheet" href="./Static/css/style.css"> -->
 </head>
 
-<body>
+<body style= "background-color: rgb(53, 54, 58);">
   <nav class="navbar navbar-expand-lg navbar-dark">
 
     <a class="navbar-brand" href="./index.html"><img src="../Resources/logo_gs_color.png" id="stock_logo"
@@ -25,29 +25,31 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
 
-        <select id="selDataset" onchange="optionChanged(this.value)">
+        <!-- <select id="selDataset" onchange="optionChanged(this.value)">
           <option value="" >Select Sector</option>
         </select>
 
         <select id="selDataset2" onchange="optionChanged(this.value)">
             <option value="" >Select Ticker</option>
-          </select>
-
-          <!-- <select id="selDataset3" onchange="optionChanged(this.value)">
-            <option value="" >Select Ticker</option>
           </select> -->
 
-        <!-- <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            All Charts
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="./html_files/candlestick.html">Candlestick</a>
-            <a class="dropdown-item" href="./html_files/predictions.html">Predictions</a>
-            <a class="dropdown-item" href="./html_files/predictions_bc.html">Predictions by % Change</a>
-          </div>
-        </li> -->
+        <!-- Load d3.js RAVI-->
+        <script src="https://d3js.org/d3.v4.js"></script>
+
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+
+        <script src="https://d3js.org/d3-color.v2.min.js"></script>
+
+        <script src="https://d3js.org/d3-interpolate.v2.min.js"></script>
+
+        <script src="https://d3js.org/d3-scale-chromatic.v2.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
+
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+        
+
         <li class="nav-item">
           <a class="nav-link" href="./html_files/tree_map.html">Tree Map (Home)</a>
         </li>
@@ -66,11 +68,31 @@
   <div class="container">
     <!-- Row0 -->
     <section class="row">
-      <div class="col-md-12">
+
+      <div class="col-md-8">
 
         <h1 id="main_title">SPX500 Insights</h1>
-
       </div>
+
+      <div class="col-md-2">
+        <!-- kevin's drop down -->
+        <select id="selDataset2" onchange="optionChanged(this.value)">
+          <!-- <option value="">Select Ticker</option> -->
+        </select>
+
+        <select id="selDataset" onchange="optionChanged(this.value)">
+          <option value="">Select Sector ()</option>
+        </select>
+      </div>
+      <!-- kevin's drop down end   -->
+
+
+     
+
+      
+
+      <!-- Create a div where the graph will take place RAVI-->
+      <div id="my_dataviz"></div>
 
 
     
@@ -113,6 +135,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="../Kevin/Playground.js"></script>
+
+<script src = "../Static/js/treemap.js"></script>
+
+<script src = "../Resources/raviStockInfo.json"></script>
 <!-- <script src="/Static/data/stockInfo.json"></script> -->
 
 
