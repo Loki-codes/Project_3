@@ -26,7 +26,7 @@ function tree()
           "translate(" + margin.left + "," + margin.top + ")");
 
   // read json data
-  d3.json("https://ksheekey.github.io/Greener-Stocks/Treemap/Resources/raviStockInfo.json").then(function(data)  {
+  d3.json("./Resources/P_ThreeRaviStockInfo.json").then(function(data)  {
 
     //console.log(data.forEach(vol => vol.Ticker));
       // Give the data to this cluster layout:
@@ -34,10 +34,10 @@ function tree()
       .sum(function(d)
       { 
   
-        return Math.abs((((d.Cmo6-d.Omo1)/d.Omo1)*100)) ;// Here the size of each leave is given in the 'value' field in input data
+        return Math.abs((((d.Cmo2-d.Omo1)/d.Omo1)*100)) ;// Here the size of each leave is given in the 'value' field in input data
       });
       
-  
+      console.log(root);
       // Then d3.treemap computes the position of each element of the hierarchy
       d3.treemap()
         .size([width, height])
@@ -82,10 +82,10 @@ function tree()
           .html(`<strong> Ticker:</strong> ${d.data.Ticker} <br>
           <strong> Company Name:</strong> ${d.data.name} <br>
           <strong> Sector:</strong> ${d.data.sector} <br> 
-          <strong> Highest Price(in 6 months):</strong> ${Math.max(d.data.Hmo1,d.data.Hmo2,d.data.Hmo3,d.data.Hmo4,d.data.Hmo5,d.data.Hmo6)} <br>
-          <strong> Lowest Price (in 6 months):</strong> ${Math.min(d.data.Lmo1,d.data.Lmo2,d.data.Lmo3,d.data.Lmo4,d.data.Lmo5,d.data.Lmo6)} <br>
-          <strong> Volume:</strong> ${d.data.Vmo6} <br>
-          <strong> % Change (in 6 months):</strong> ${Math.round(((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) + Number.EPSILON)*100) / 100} %`)
+          <strong> Highest Price(in 6 months):</strong> ${Math.max(d.data.Hmo1,d.data.Hmo2)} <br>
+          <strong> Lowest Price (in 6 months):</strong> ${Math.min(d.data.Lmo1,d.data.Lmo2)} <br>
+          <strong> Volume:</strong> ${d.data.Vmo2} <br>
+          <strong> % Change (in 6 months):</strong> ${Math.round(((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) + Number.EPSILON)*100) / 100} %`)
           .style("left", (d3.mouse(this)[0]+ 70) + "px")
           .style("top", (d3.mouse(this)[1]) + "px")
 
@@ -122,31 +122,31 @@ function tree()
           
           .attr("fill", function (d)
           {
-            if ((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) <= -31)
+            if ((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) <= -31)
             {
               return "#FF0000";
             }
-            else if (((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) > -31) && ((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) < -22))
+            else if (((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) > -31) && ((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) < -22))
             {
               return "#CC0000";
             }
-            else if (((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) > -22) && ((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) < -15))
+            else if (((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) > -22) && ((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) < -15))
             {
               return "#990000";
             }
-            else if (((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) > -15) && ((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) < 0)) 
+            else if (((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) > -15) && ((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) < 0)) 
             {
               return "#971616";
             }
-            else if ((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) == 0)
+            else if ((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) == 0)
             {
               return "#405147";
             }
-            else if (((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) > 0) && ((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) < 4))
+            else if (((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) > 0) && ((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) < 4))
             {
               return "#006600";
             }
-            else if ((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) > 4)
+            else if ((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) > 4)
             {
               return "#009900";
             }
@@ -194,7 +194,7 @@ function tree()
             }
             else
             {
-              return (Math.round(((((d.data.Cmo6-d.data.Omo1)/d.data.Omo1)*100) + Number.EPSILON)*100) / 100 +"%"); 
+              return (Math.round(((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) + Number.EPSILON)*100) / 100 +"%"); 
             }
         })
           .attr("font-size", "10px")
@@ -211,6 +211,7 @@ function tree()
           .text(function(d){ return d.data.sector })
           .attr("font-size", "19px")
           .attr("fill",  function(d){ return color(d.data.sector)} )
+          .style("cursor", "pointer")
           // on click condition for a particular sector view...
           .on("click", function(d) {
             if ((d.data.sector) == "Industrials")
