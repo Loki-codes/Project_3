@@ -26,7 +26,7 @@ function tree()
           "translate(" + margin.left + "," + margin.top + ")");
 
   // read json data
-  d3.json("./Resources/P_ThreeRaviStockInfo.json").then(function(data)  {
+  d3.json("./Treemap/Resources/P_ThreeRaviStockInfo.json").then(function(data)  {
 
     //console.log(data.forEach(vol => vol.Ticker));
       // Give the data to this cluster layout:
