@@ -260,7 +260,7 @@ function tree()
             }
             else
             {
-              window.location = "../../html_files/tree_map.html";
+              window.location = "../../index.html";
             }
           })
   });
