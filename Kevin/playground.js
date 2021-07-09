@@ -110,7 +110,9 @@ d3.json("../Static/data/stockInfo.json").then((data, err) => {
 
     var trace1 = [{x: [1, 2, 3], y: y, type: "line"}]
 
-    Plotly.newPlot("candlestick", trace1)
+    var layOut = {title: `${filterArray2[0].name}(${filterArray2[0].Ticker}) Closing Price`,xaxis: {title: "Month Closing"},yaxis: {title: "Closing Price",autorange: true,type: "linear"}};
+
+    Plotly.newPlot("candlestick", trace1, layOut)
   }
 
 })
