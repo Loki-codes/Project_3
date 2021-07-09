@@ -40,11 +40,11 @@
       <div class="col-md-2">
 
       <!-- kevin's drop down -->
-      <select id="selDataset2" onchange="optionChanged(this.value)">
+      <select id="selDataset2" onchange="tickerChanged(this.value)">
         <!-- <option value="">Select Ticker</option> -->
       </select>
 
-      <select id="selDataset" onchange="optionChanged(this.value)">
+      <select id="selDataset" onchange="sectorChanged(this.value)">
         <option value="">Select Sector ()</option>
       </select>
     </div>
@@ -56,6 +56,11 @@
       </div>
       <section class="row">
         <div class="col-md-12" id="my_dataviz">
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div id="candlestick"></div>
+          </div>
         </div>
       </section>
     </section>
