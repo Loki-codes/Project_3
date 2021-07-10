@@ -82,10 +82,10 @@ function tree()
           .html(`<strong> Ticker:</strong> ${d.data.Ticker} <br>
           <strong> Company Name:</strong> ${d.data.name} <br>
           <strong> Sector:</strong> ${d.data.sector} <br> 
-          <strong> Highest Price(in 6 months):</strong> ${Math.max(d.data.Hmo1,d.data.Hmo2)} <br>
-          <strong> Lowest Price (in 6 months):</strong> ${Math.min(d.data.Lmo1,d.data.Lmo2)} <br>
+          <strong> Highest Price(May-Jun 2021):</strong> ${Math.max(d.data.Hmo1,d.data.Hmo2)} <br>
+          <strong> Lowest Price (May-Jun 2021):</strong> ${Math.min(d.data.Lmo1,d.data.Lmo2)} <br>
           <strong> Volume:</strong> ${d.data.Vmo2} <br>
-          <strong> % Change (in 6 months):</strong> ${Math.round(((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) + Number.EPSILON)*100) / 100} %`)
+          <strong> % Change (May-Jun 2021):</strong> ${Math.round(((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) + Number.EPSILON)*100) / 100} %`)
           .style("left", (d3.mouse(this)[0]+ 70) + "px")
           .style("top", (d3.mouse(this)[1]) + "px")
 
