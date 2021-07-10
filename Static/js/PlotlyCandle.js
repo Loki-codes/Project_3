@@ -1,4 +1,4 @@
-d3.json("../Static/data/MultiDayInfo.json").then((data, err) => {
+d3.json("../Static/data/stockInfoF.json").then((data, err) => {
     if (err) throw err;
   
     // making sure something shows up on console
@@ -108,7 +108,7 @@ d3.json("../Static/data/MultiDayInfo.json").then((data, err) => {
       // filter the entire dataset and create an array of the Ticker chosen
       var filterArray2 = data.filter(d2 => d2.Ticker === dataset2);
   
-      console.log(filterArray2[0].Opening_6_28_21)
+      console.log(filterArray2[0])
   
       localStorage.setItem("array", filterArray2);
   
@@ -120,13 +120,20 @@ d3.json("../Static/data/MultiDayInfo.json").then((data, err) => {
   
       Plotly.newPlot("candlestick", trace1, layOut)
 
+      // Info Box Work
+      var _6monthHigh = Math.max(filterArray2[0].Hmo5,filterArray2[0].Hmo4,filterArray2[0].Hmo3,filterArray2[0].Hmo2,filterArray2[0].Hmo1)
+      var _6monthLow = Math.max(filterArray2[0].Lmo5,filterArray2[0].Lmo4,filterArray2[0].Lmo3,filterArray2[0].Lmo2,filterArray2[0].Lmo1)
+      var _6monthAvgVol = ((filterArray2[0].Vmo5+filterArray2[0].Vmo4+filterArray2[0].Vmo3+filterArray2[0].Vmo2+filterArray2[0].Vmo1)/5)
+      var _6monthPerChange = Math.round(((((filterArray2[0].Cmo1-filterArray2[0].Omo5)/filterArray2[0].Omo5)*100) + Number.EPSILON)*100) / 100
+      // console.log(_volumes)
+
       d3.select(".toad").append("li").html(`<strong> Ticker:</strong> ${filterArray2[0].Ticker} <br>
         <strong> Company Name:</strong> ${filterArray2[0].name} <br>
         <strong> Sector:</strong> ${filterArray2[0].sector}<br>
-        <strong> 6 Month High:</strong> __ <br>
-        <strong> 6 Month Low:</strong> __ <br>
-        <strong> Volume:</strong> __ <br>
-        <strong> % Change in last 6 Months:</strong> __ <br>`)
+        <strong> 6 Month High:</strong> ${_6monthHigh} <br>
+        <strong> 6 Month Low:</strong> ${_6monthLow} <br>
+        <strong> Avg. Monthly Volume:</strong> ${_6monthAvgVol} <br>
+        <strong> % Change in last 6 Months:</strong> ${_6monthPerChange} <br>`)
     }
   
   })
