@@ -1,8 +1,9 @@
-d3.json("../Static/data/stockInfo.json").then((data, err) => {
+d3.json("../Static/data/MultiDayInfo.json").then((data, err) => {
     if (err) throw err;
   
     // making sure something shows up on console
     console.log("RDBC")
+    console.log(data)
   
     // This is work for the sector dropwdown
   
@@ -95,6 +96,11 @@ d3.json("../Static/data/stockInfo.json").then((data, err) => {
     d3.selectAll("#selDataset2").on("change", tickerChanged);
   
     function tickerChanged() {
+
+      d3.select("#my_dataviz").html("");
+      d3.select("#peach").html(""); 
+      d3.select(".toad").html("");
+
       // selecting the Ticker dropdown menu
       var dropdownMenu2 = d3.select("#selDataset2");
       // Assign the value of the dropdown menu option to a variable
@@ -102,7 +108,7 @@ d3.json("../Static/data/stockInfo.json").then((data, err) => {
       // filter the entire dataset and create an array of the Ticker chosen
       var filterArray2 = data.filter(d2 => d2.Ticker === dataset2);
   
-      console.log(filterArray2)
+      console.log(filterArray2[0].Opening_6_28_21)
   
       localStorage.setItem("array", filterArray2);
   
@@ -113,6 +119,14 @@ d3.json("../Static/data/stockInfo.json").then((data, err) => {
       var layOut = {title: `${filterArray2[0].name} (${filterArray2[0].Ticker}) Closing Price`,xaxis: {title: "Month Closing"},yaxis: {title: "Closing Price",autorange: true,type: "linear"}};
   
       Plotly.newPlot("candlestick", trace1, layOut)
+
+      d3.select(".toad").append("li").html(`<strong> Ticker:</strong> ${filterArray2[0].Ticker} <br>
+        <strong> Company Name:</strong> ${filterArray2[0].name} <br>
+        <strong> Sector:</strong> ${filterArray2[0].sector}<br>
+        <strong> 6 Month High:</strong> __ <br>
+        <strong> 6 Month Low:</strong> __ <br>
+        <strong> Volume:</strong> __ <br>
+        <strong> % Change in last 6 Months:</strong> __ <br>`)
     }
   
   })

@@ -3,6 +3,7 @@ d3.json("../Static/data/stockInfo.json").then((data, err) => {
 
   // making sure something shows up on console
   console.log("RDBC")
+  console.log(data)
 
   // This is work for the sector dropwdown
 
