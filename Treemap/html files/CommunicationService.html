@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <nav class="navbar navbar-expand-lg navbar-dark">
 
     <a class="navbar-brand" href="../../index.html"><img src="../../Resources/logo_gs_color.png" id="stock_logo"
         alt="Greener Stocks"></a>
@@ -24,25 +24,6 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            All Charts
-            
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="../../html_files/candlestick.html">Candlestick</a>
-            <a class="dropdown-item" href="../../html_files/predictions.html">Predictions</a>
-            <a class="dropdown-item" href="../../html_files/predictions_bc.html">Predictions by % Change</a>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../../html_files/tree_map.html">Tree Map</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://greener-stocks-words.herokuapp.com/">News WC</a>
-        </li>
         <li class="nav-item">
           <a class="nav-link" href="../../html_files/data.html">Data</a>
         </li>
@@ -57,7 +38,7 @@
 
    <!-- Create the overall grid -->
    <h1 id="main_title">Tree Map of Stocks</h1>
-   <p style="text-align: center;"> Our tree map determines the size of its squares based on the percentage change of each stock over the last 6 months. <br> This is designed to be useful for day traders and short term stock investors as apposed to most leaf and tree diagrams which are used to look at overall market dynamics. </p>
+   <p style="text-align: center;"> Our tree map determines the size of its squares based on the percentage change of each stock over the last 2 months. <br> This is designed to be useful for day traders and short term stock investors as apposed to most leaf and tree diagrams which are used to look at overall market dynamics. </p>
 
    <div class="container-lg" >
     <!-- Row0 -->
@@ -174,10 +155,10 @@
           .html(`<strong> Ticker:</strong> ${d.data.Ticker} <br>
           <strong> Company Name:</strong> ${d.data.name} <br>
           <strong> Sector:</strong> ${d.data.sector} <br> 
-          <strong> Highest Price(in 2 months):</strong> ${Math.max(d.data.Hmo1,d.data.Hmo2)} <br>
-          <strong> Lowest Price (in 2 months):</strong> ${Math.min(d.data.Lmo1,d.data.Lmo2)} <br>
+          <strong> Highest Price(May-Jun 2021):</strong> ${Math.max(d.data.Hmo1,d.data.Hmo2)} <br>
+          <strong> Lowest Price (May-Jun 2021):</strong> ${Math.min(d.data.Lmo1,d.data.Lmo2)} <br>
           <strong> Volume:</strong> ${d.data.Vmo2} <br>
-          <strong> % Change (in 2 months):</strong> ${Math.round(((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) + Number.EPSILON)*100) / 100} %`)
+          <strong> % Change (May-Jun 2021):</strong> ${Math.round(((((d.data.Cmo2-d.data.Omo1)/d.data.Omo1)*100) + Number.EPSILON)*100) / 100} %`)
           .style("left", (d3.mouse(this)[0]+ 70) + "px")
           .style("top", (d3.mouse(this)[1]) + "px")
           
