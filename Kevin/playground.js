@@ -107,12 +107,14 @@ d3.json("../Static/data/stockInfo.json").then((data, err) => {
 
     localStorage.setItem("array", filterArray2);
 
-    var y = [filterArray2[0].Omo1, filterArray2[0].Omo2, filterArray2[0].Omo3]
+    var FA2 = Object.entries(filterArray2[0])
+    console.log(FA2.Ticker) // 3 8 13 18 23 28
 
-    var trace1 = [{x: [1, 2, 3], y: y, type: "line"}]
-
-    var layOut = {title: `${filterArray2[0].name}(${filterArray2[0].Ticker}) Closing Price`,xaxis: {title: "Month Closing"},yaxis: {title: "Closing Price",autorange: true,type: "linear"}};
-
+    // DUMMY PLOT work
+    var x = [FA2[3][0],FA2[8][0],FA2[13][0],FA2[18][0],FA2[23][0],FA2[28][0]]
+    var y = [FA2[3][1],FA2[8][1],FA2[13][1],FA2[18][1],FA2[23][1],FA2[28][1]]
+    var trace1 = [{ x:x, y:y, type: "line" }]
+    var layOut = { title: `${filterArray2[0].name} (${filterArray2[0].Ticker}) Closing Price`, xaxis: { title: "Month Closing" }, yaxis: { title: "Closing Price", autorange: true, type: "linear" } };
     Plotly.newPlot("candlestick", trace1, layOut)
   }
 

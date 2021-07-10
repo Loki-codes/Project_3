@@ -1,13 +1,10 @@
-d3.json("../Static/data/stockInfoF.json").then((data, err) => {
+d3.json("../Static/data/Predicted_Info.json").then((data, err) => {
   if (err) throw err;
-  d3.select(".toad").html("");
 
   // making sure something shows up on console
   console.log("RDBC")
-  console.log(data)
-
+  
   // This is work for the sector dropwdown
-
   // create empty list for sectors
   var sectorNames = []
 
@@ -31,7 +28,6 @@ d3.json("../Static/data/stockInfoF.json").then((data, err) => {
 
 
   // This is work for the Ticker dropwdown
-
   // create empty dictonary for ticker info
   var tickerNames = { "": "Select Ticker" }
 
@@ -49,19 +45,19 @@ d3.json("../Static/data/stockInfoF.json").then((data, err) => {
     .text(function (d) { return `${d[1]} (${d[0]})` })
     .attr("value", function (d) { return d[0] })
 
+  // clearing infobox
+  d3.select(".toad").html("");
+
   //calling function when a sector is chosen
   d3.selectAll("#selDataset").on("change", sectorChanged);
 
   function sectorChanged() {
-
     // selecting the sector dropdown menu
     var dropdownMenu = d3.select("#selDataset");
     // Assign the value of the dropdown menu option to a variable
     var dataset = dropdownMenu.property("value");
     // filter the entire dataset and create an array of stocks in the sector chosen
     var filterArray = data.filter(d1 => d1.sector === dataset);
-
-    console.log(filterArray)
 
     // creating empty dictionary for filtered stock tickers and names
     var tickerNames2 = { "": "Select Ticker" }
@@ -99,7 +95,6 @@ d3.json("../Static/data/stockInfoF.json").then((data, err) => {
   d3.selectAll("#selDataset2").on("change", tickerChanged);
 
   function tickerChanged() {
-
     // clearing visuals to be replaced
     d3.select("#my_dataviz").html("");
     d3.select("#peach").html("");
@@ -112,19 +107,20 @@ d3.json("../Static/data/stockInfoF.json").then((data, err) => {
     // filter the entire dataset and create an array of the Ticker chosen
     var filterArray2 = data.filter(d2 => d2.Ticker === dataset2);
 
-    console.log(filterArray2[0])
-
     // putting it in local storage incase we want multi-pages
     localStorage.setItem("array", filterArray2);
 
-    // DUMMY PLOT work
-    var y = [filterArray2[0].Omo1, filterArray2[0].Omo2, filterArray2[0].Omo3]
-    var trace1 = [{ x: [1, 2, 3], y: y, type: "line" }]
+    // Plotly Predicted plot
+    // pulling the key,value pairs
+    var FA2 = Object.entries(filterArray2[0])
+    // creating plot with opening values
+    var x = [FA2[3][0], FA2[8][0], FA2[13][0], FA2[18][0], FA2[23][0]]
+    var y = [FA2[3][1], FA2[8][1], FA2[13][1], FA2[18][1], FA2[23][1]]
+    var trace1 = [{ x: x, y: y, type: "line" }]
     var layOut = { title: `${filterArray2[0].name} (${filterArray2[0].Ticker}) Closing Price`, xaxis: { title: "Month Closing" }, yaxis: { title: "Closing Price", autorange: true, type: "linear" } };
     Plotly.newPlot("candlestick", trace1, layOut)
 
     // Info Box Work
-
     // putting info into variable
     var _6monthHigh = Math.max(filterArray2[0].Hmo5, filterArray2[0].Hmo4, filterArray2[0].Hmo3, filterArray2[0].Hmo2, filterArray2[0].Hmo1)
     var _6monthLow = Math.max(filterArray2[0].Lmo5, filterArray2[0].Lmo4, filterArray2[0].Lmo3, filterArray2[0].Lmo2, filterArray2[0].Lmo1)

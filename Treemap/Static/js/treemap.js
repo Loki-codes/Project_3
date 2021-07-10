@@ -37,7 +37,7 @@ function tree()
         return Math.abs((((d.Cmo2-d.Omo1)/d.Omo1)*100)) ;// Here the size of each leave is given in the 'value' field in input data
       });
       
-      console.log(root);
+      // console.log(root);
       // Then d3.treemap computes the position of each element of the hierarchy
       d3.treemap()
         .size([width, height])
