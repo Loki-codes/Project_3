@@ -1,5 +1,6 @@
 d3.json("../Static/data/stockInfoF.json").then((data, err) => {
   if (err) throw err;
+  d3.select(".toad").html("");
 
   // making sure something shows up on console
   console.log("RDBC")

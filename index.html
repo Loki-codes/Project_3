@@ -22,9 +22,6 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="./html_files/predictions.html">Predictions</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" href="./html_files/data.html">Data</a>
         </li>
         <li class="nav-item">
@@ -47,6 +44,9 @@
       <select id="selDataset" onchange="sectorChanged(this.value)">
         <option value="">Select Sector ()</option>
       </select>
+      <p>
+
+      </p>
     </div>
     <!-- kevin's drop down end   -->
 
@@ -55,8 +55,10 @@
         <h1 id="main_title">SPX500 Insights</h1>
       </div>
       <section class="row">
+        <div class="span10">
         <div class="col-md-12" id="my_dataviz">
         </div>
+      </div>
         <div class="row">
           <div class="col-md-6, peach">
             <div id="candlestick"></div>
