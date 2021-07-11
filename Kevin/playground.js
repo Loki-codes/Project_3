@@ -1,9 +1,32 @@
-d3.json("../Static/data/stockInfo.json").then((data, err) => {
+d3.json("../Static/data/Predicted_Info.json").then((data, err) => {
   if (err) throw err;
+
+  RAVIdiff = [12]
+
+  var svg = d3.select("#svg-area")
+    .append("svg")
+    .attr("height", "600")
+    .attr("width", "400");
+
+  // Append a rectangle and set its height in relation to the booksReadThisYear value
+  svg.append("rect")
+    .classed("bar", true) // for bonus
+    .data(RAVIdiff)
+    .attr("width", 100)
+    .attr("height", 100)
+    .attr("x", 0)
+    .attr("y", 0);
 
   // making sure something shows up on console
   console.log("RDBC")
-  console.log(data)
+  // console.log(data[1].Ticker)
+
+  // if (data[0].Ticker != data[0].Ticker) {
+  //   console.log("no shot pal")
+  // }
+  // else {
+  //   console.log("wow such awesome")
+  // }
 
   // This is work for the sector dropwdown
 
@@ -60,7 +83,7 @@ d3.json("../Static/data/stockInfo.json").then((data, err) => {
     // filter the entire dataset and create an array of stocks in the sector chosen
     var filterArray = data.filter(d1 => d1.sector === dataset);
 
-    console.log(filterArray)
+    // console.log(filterArray)
 
     // creating empty dictionary for filtered stock tickers and names
     var tickerNames2 = { "": "Select Ticker" }
@@ -96,6 +119,10 @@ d3.json("../Static/data/stockInfo.json").then((data, err) => {
   d3.selectAll("#selDataset2").on("change", tickerChanged);
 
   function tickerChanged() {
+
+    d3.select("#candlestick").html("");
+    d3.select("#svg-area").html("");
+    d3.select("#predictor").html("");
     // selecting the Ticker dropdown menu
     var dropdownMenu2 = d3.select("#selDataset2");
     // Assign the value of the dropdown menu option to a variable
@@ -103,19 +130,95 @@ d3.json("../Static/data/stockInfo.json").then((data, err) => {
     // filter the entire dataset and create an array of the Ticker chosen
     var filterArray2 = data.filter(d2 => d2.Ticker === dataset2);
 
-    console.log(filterArray2)
+    var tickerForD3 = filterArray2[0].Ticker
 
-    localStorage.setItem("array", filterArray2);
+    console.log(tickerForD3)
 
-    var FA2 = Object.entries(filterArray2[0])
-    console.log(FA2.Ticker) // 3 8 13 18 23 28
 
-    // DUMMY PLOT work
-    var x = [FA2[3][0],FA2[8][0],FA2[13][0],FA2[18][0],FA2[23][0],FA2[28][0]]
-    var y = [FA2[3][1],FA2[8][1],FA2[13][1],FA2[18][1],FA2[23][1],FA2[28][1]]
-    var trace1 = [{ x:x, y:y, type: "line" }]
-    var layOut = { title: `${filterArray2[0].name} (${filterArray2[0].Ticker}) Closing Price`, xaxis: { title: "Month Closing" }, yaxis: { title: "Closing Price", autorange: true, type: "linear" } };
-    Plotly.newPlot("candlestick", trace1, layOut)
+
+
+    d3.csv("../Static/data/MLData3.csv").then((plotData, err) => {
+
+      var singleStock = []
+      var percChange = []
+
+      // for (var i = 0; i < plotData.length; i++) {
+      //   if (plotData[i].Ticker == tickerForD3 && plotData[i].date == "2021-04-30" || plotData[i].date == "2021-07-01") {
+      //     // singleStock.push(plotData[i])
+      //     percChange.push(plotData[i])
+      //   }
+      //   else {
+      //     continue
+      //   }
+      // }
+      // var SStock = singleStock.slice(0).slice(-4)
+
+      plotData.forEach(function (d4) {
+        if (d4.Ticker == tickerForD3 && d4.date == "2021-04-30" || d4.Ticker == tickerForD3 && d4.date == "2021-07-01") {
+          if (d4.Ticker == tickerForD3 && d4.date == "2021-04-30") {
+            percChange.push(d4.opening)
+          }
+          else {
+            percChange.push(d4.closing)
+          }
+        }
+
+      })
+      console.log(percChange)
+      var RAVIdiff = ((percChange[1] - percChange[0]) / percChange[0]) * 100
+      RRavidiff = RAVIdiff.toFixed(2)
+      singleStock.push(RAVIdiff)
+      console.log(RAVIdiff * 100)
+
+      var height = 150
+      var width = 150
+      // Append the SVG wrapper to the page, set its height and width, and create a variable which references it
+      var svg = d3.select("#predictor")
+        .append("svg")
+        .attr("height", height)
+        .attr("width", width);
+
+      // Append a rectangle and set its height in relation to the booksReadThisYear value
+      svg.append("rect")
+        .data(singleStock)
+        .attr("width", width)
+        .attr("height", height)
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("fill", function (d) {
+          if ((d) <= -31) { return "#FF0000"; }
+          else if (((d) > -31) && (((d)) < -22)) { return "#CC0000"; }
+          else if (((d) > -22) && ((d) < -15)) { return "#990000"; }
+          else if (((d) > -15) && ((d) < 0)) { return "#971616"; }
+          else if ((d) == 0) { return "#405147"; }
+          else if (((d) > 0) && ((d) < 4)) { return "#006600"; }
+          else if ((d) > 4) { return "#009900"; };
+        })
+
+        svg.append("text")
+          .attr("color","white")
+          .attr("x", width /20)
+          .attr("y", height /1.8)
+          .html(`${RRavidiff}%`)
+          
+
+        
+
+
+
+
+
+
+
+      // // ????????????????????????????????? //
+
+
+
+
+
+
+
+
+    })
   }
-
 })

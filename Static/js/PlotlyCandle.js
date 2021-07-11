@@ -107,6 +107,8 @@ d3.json("../Static/data/Predicted_Info.json").then((data, err) => {
     // filter the entire dataset and create an array of the Ticker chosen
     var filterArray2 = data.filter(d2 => d2.Ticker === dataset2);
 
+    var tickerForD3 = filterArray2[0].Ticker
+
     // putting it in local storage incase we want multi-pages
     localStorage.setItem("array", filterArray2);
 
@@ -121,20 +123,66 @@ d3.json("../Static/data/Predicted_Info.json").then((data, err) => {
     Plotly.newPlot("candlestick", trace1, layOut)
 
     // Info Box Work
-    // putting info into variable
-    var _6monthHigh = Math.max(filterArray2[0].Hmo5, filterArray2[0].Hmo4, filterArray2[0].Hmo3, filterArray2[0].Hmo2, filterArray2[0].Hmo1)
-    var _6monthLow = Math.max(filterArray2[0].Lmo5, filterArray2[0].Lmo4, filterArray2[0].Lmo3, filterArray2[0].Lmo2, filterArray2[0].Lmo1)
-    var _6monthAvgVol = ((filterArray2[0].Vmo5 + filterArray2[0].Vmo4 + filterArray2[0].Vmo3 + filterArray2[0].Vmo2 + filterArray2[0].Vmo1) / 5)
-    var _6monthPerChange = Math.round(((((filterArray2[0].Cmo1 - filterArray2[0].Omo5) / filterArray2[0].Omo5) * 100) + Number.EPSILON) * 100) / 100
+    // calling the ML csv to match treemap numbers
+    d3.csv("../Static/data/MLData3.csv").then((plotData, err) => {
 
-    // making an info box that matches the tooltip
-    d3.select(".toad").append("li").html(`<strong> Ticker:</strong> ${filterArray2[0].Ticker} <br>
-        <strong> Company Name:</strong> ${filterArray2[0].name} <br>
-        <strong> Sector:</strong> ${filterArray2[0].sector}<br>
-        <strong> 6 Month High:</strong> ${_6monthHigh} <br>
-        <strong> 6 Month Low:</strong> ${_6monthLow} <br>
-        <strong> Avg. Monthly Volume:</strong> ${_6monthAvgVol} <br>
-        <strong> % Change in last 6 Months:</strong> ${_6monthPerChange} <br>`)
+      // creating empy lists for data
+      var infoBox = []
+      var percChange = []
+
+      // doing a forEach loop to get just the info for the days in the treemap % change (4/30&7/1)
+      plotData.forEach(function (d4) {
+        if (d4.Ticker == tickerForD3 && d4.date == "2021-04-30" || d4.Ticker == tickerForD3 && d4.date == "2021-07-01") {
+          if (d4.Ticker == tickerForD3 && d4.date == "2021-04-30") {
+            percChange.push(d4.opening)
+          }
+          else {
+            percChange.push(d4.closing)
+          }
+        }
+
+      })
+      // doing the percent change calc and storing into a variable
+      var RAVIdiff = ((percChange[1] - percChange[0]) / percChange[0]) * 100
+      // rounding to 2 decimals
+      RRavidiff = RAVIdiff.toFixed(2)
+      // pushing that into another list for correct structure
+      infoBox.push(RAVIdiff)
+
+      // variables for height/width of info box
+      var height = 150
+      var width = 150
+
+      // Appending SVG wrapper to predictor, set its height and width, and create a variable which references it
+      var svg = d3.select("#predictor")
+        .append("svg")
+        .attr("height", height)
+        .attr("width", width);
+
+      // Append a rectangle and calling data
+      svg.append("rect")
+        .data(infoBox)
+        .attr("width", width)
+        .attr("height", height)
+        .attr("x", 0)
+        .attr("y", 0)
+        // if condition to color the box to match the treemap color for that stock
+        .attr("fill", function (d) {
+          if ((d) <= -31) { return "#FF0000"; }
+          else if (((d) > -31) && (((d)) < -22)) { return "#CC0000"; }
+          else if (((d) > -22) && ((d) < -15)) { return "#990000"; }
+          else if (((d) > -15) && ((d) < 0)) { return "#971616"; }
+          else if ((d) == 0) { return "#405147"; }
+          else if (((d) > 0) && ((d) < 4)) { return "#006600"; }
+          else if ((d) > 4) { return "#009900"; };
+        })
+
+        // append the text element to the box
+        svg.append("text")
+          .attr("color","white")
+          .attr("x", width /20)
+          .attr("y", height /1.8)
+          .html(`${RRavidiff}%`)
+      })
   }
-
 })
