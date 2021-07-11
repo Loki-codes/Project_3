@@ -123,7 +123,7 @@ d3.json("../Static/data/Predicted_Info.json").then((data, err) => {
     Plotly.newPlot("candlestick", trace1, layOut)
 
     // Info Box Work
-    // calling the ML csv to match treemap numbers
+    // calling the ML csv to match treemap numbers and colors
     d3.csv("../Static/data/MLData3.csv").then((plotData, err) => {
 
       // creating empy lists for data
@@ -144,10 +144,10 @@ d3.json("../Static/data/Predicted_Info.json").then((data, err) => {
       })
       // doing the percent change calc and storing into a variable
       var RAVIdiff = ((percChange[1] - percChange[0]) / percChange[0]) * 100
-      // rounding to 2 decimals
-      RRavidiff = RAVIdiff.toFixed(2)
       // pushing that into another list for correct structure
       infoBox.push(RAVIdiff)
+      // rounding to 2 decimals
+      RRavidiff = RAVIdiff.toFixed(2)
 
       // variables for height/width of info box
       var height = 150
