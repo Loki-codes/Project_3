@@ -1,4 +1,4 @@
-d3.json("../Static/data/Predicted_Info.json").then((data, err) => {
+d3.json("../public/Static/data/Predicted_Info_2.json").then((data, err) => {
   if (err) throw err;
 
   // making sure something shows up on console
@@ -99,6 +99,7 @@ d3.json("../Static/data/Predicted_Info.json").then((data, err) => {
     d3.select("#my_dataviz").html("");
     d3.select("#peach").html("");
     d3.select(".toad").html("");
+    d3.select("#predictor").html("");
 
     // selecting the Ticker dropdown menu
     var dropdownMenu2 = d3.select("#selDataset2");
@@ -146,7 +147,7 @@ d3.json("../Static/data/Predicted_Info.json").then((data, err) => {
 
     console.log(filters);
     // Load data from forcepoints.csv
-    d3.csv("../Static/data/MLData3.csv").then(function(forceData) {
+    d3.csv("../public/Static/data/MLData3.csv").then(function(forceData) {
 
 
       forceData = forceData.filter(function(row) {
@@ -238,7 +239,7 @@ d3.json("../Static/data/Predicted_Info.json").then((data, err) => {
 
     // Info Box Work
     // calling the ML csv to match treemap numbers and colors
-    d3.csv("../Static/data/MLData3.csv").then((plotData, err) => {
+    d3.csv("../public/Static/data/MLData3.csv").then((plotData, err) => {
 
       // creating empy lists for data
       var infoBox = []
