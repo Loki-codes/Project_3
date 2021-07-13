@@ -25,7 +25,7 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Configure a parseTime function which will return a new Date object from a string
-var parseTime = d3.timeParse('%m/%d/%Y');
+var parseTime = d3.timeParse('%Y-%m-%d');
 
 
 
@@ -34,12 +34,12 @@ var filters = { 'Ticker': ['MMM']};
 
 
 // Load data from forcepoints.csv
-d3.csv("forcepoints.csv").then(function(forceData) {
+d3.csv("MLData3.csv").then(function(forceData) {
 
 
   forceData = forceData.filter(function(row) {
     // run through all the filters, returning a boolean
-    return ['date','opening','Ticker'].reduce(function(pass, column) {
+    return ['Ticker','date','sector','name','opening','closing','next_Opening'].reduce(function(pass, column) {
         return pass && (
             // pass if no filter is set
             !filters[column] ||

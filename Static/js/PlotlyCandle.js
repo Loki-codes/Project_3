@@ -109,6 +109,120 @@ d3.json("../Static/data/Predicted_Info.json").then((data, err) => {
 
     var tickerForD3 = filterArray2[0].Ticker
 
+  
+    // Define SVG area dimensions
+    var svgWidth = 960;
+    var svgHeight = 500;
+
+    // Define the chart's margins as an object
+    var margin = {
+      top: 60,
+      right: 60,
+      bottom: 60,
+      left: 60
+    };
+
+    // Define dimensions of the chart area
+    var chartWidth = svgWidth - margin.left - margin.right;
+    var chartHeight = svgHeight - margin.top - margin.bottom;
+
+    // Select body, append SVG area to it, and set its dimensions
+    var svg = d3.select("body")
+      .append("svg")
+      .attr("width", svgWidth)
+      .attr("height", svgHeight);
+
+    // Append a group area, then set its margins
+    var chartGroup = svg.append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+      
+    // Configure a parseTime function which will return a new Date object from a string
+    var parseTime = d3.timeParse('%Y-%m-%d');
+
+
+
+    // this will filter the ticket, still hard coded but needs to come from the user's input --- IMPORTANT TO FIX
+    var filters = {'Ticker': [tickerForD3]};
+
+    console.log(filters);
+    // Load data from forcepoints.csv
+    d3.csv("../Static/data/MLData3.csv").then(function(forceData) {
+
+
+      forceData = forceData.filter(function(row) {
+        // run through all the filters, returning a boolean
+        return ['Ticker','date','sector','name','opening','closing','next_Opening'].reduce(function(pass, column) {
+            return pass && (
+                // pass if no filter is set
+                !filters[column] ||
+                    // pass if the row's value is equal to the filter
+                    // (i.e. the filter is set to a string)
+                    row[column] === filters[column] ||
+                    // pass if the row's value is in an array of filter values
+                    filters[column].indexOf(row[column]) >= 0
+                );
+        }, true);
+    })
+
+
+      // Print the forceData NOW FILTERED According to var filters
+      
+
+      // Format the date and cast the force value to a number
+      forceData.forEach(function(data) {
+        data.date = parseTime(data.date);
+        data.force = +data.opening;
+      });
+
+
+
+
+      // Configure a time scale
+      // d3.extent returns the an array containing the min and max values for the property specified
+      var xTimeScale = d3.scaleTime()
+        .domain(d3.extent(forceData, data => data.date))
+        .range([0, chartWidth]);
+
+      // Configure a linear scale with a range between the chartHeight and 0
+      var yLinearScale = d3.scaleLinear()
+        .domain([0, d3.max(forceData, data => data.force)])
+        .range([chartHeight, 0]);
+
+      // Create two new functions passing the scales in as arguments
+      // These will be used to create the chart's axes
+      var bottomAxis = d3.axisBottom(xTimeScale);
+      var leftAxis = d3.axisLeft(yLinearScale);
+
+      // Configure a line function which will plot the x and y coordinates using our scales
+
+
+      var drawLine = d3.line()
+        .x(data => xTimeScale(data.date))
+        .y(data => yLinearScale(data.force));
+
+      // Append an SVG path and plot its points using the line function
+      chartGroup.append("path")
+        // The drawLine function returns the instructions for creating the line for forceData
+        .attr("d", drawLine(forceData))
+        .style("fill", "none")
+        .attr("stroke", "blue")
+        .classed("line", true);
+
+      // Append an SVG group element to the chartGroup, create the left axis inside of it
+      chartGroup.append("g")
+        .classed("axis", true)
+        .call(leftAxis);
+
+      // Append an SVG group element to the chartGroup, create the bottom axis inside of it
+      // Translate the bottom axis to the bottom of the page
+      chartGroup.append("g")
+        .classed("axis", true)
+        .attr("transform", `translate(0, ${chartHeight})`)
+        .call(bottomAxis);
+    }).catch(function(error) {
+      console.log(error);
+    });
+
     // putting it in local storage incase we want multi-pages
     localStorage.setItem("array", filterArray2);
 
