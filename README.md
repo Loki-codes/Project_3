@@ -3,7 +3,7 @@
 Group2
 Kevin Sheekey
 Kyle Pavelka
-Rash Gandhi
+Yash Gandhi
 Meriane Franco
 Ravi Patel
 
