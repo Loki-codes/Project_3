@@ -1,4 +1,4 @@
-d3.json("../public/Static/data/Predicted_Info_2.json").then((data, err) => {
+d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
   if (err) throw err;
 
   // making sure something shows up on console
