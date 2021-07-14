@@ -79,6 +79,11 @@ margin-right: 20px;
     fill: tan;
   }  
 
+.listList{
+    color:#47d872;
+    background-color: black;
+}
+
 .form-check{
     text-align: left;
     font-size: 15px;

@@ -1,4 +1,4 @@
-d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
+d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
   if (err) throw err;
 
   // making sure something shows up on console
@@ -94,6 +94,8 @@ d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
   //calling function when a Ticker is chosen
   d3.selectAll("#selDataset2").on("change", tickerChanged);
 
+
+
   function tickerChanged() {
     // clearing visuals to be replaced
     d3.select("#my_dataviz").html("");
@@ -102,6 +104,114 @@ d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
     d3.select("#predictor").html("");
     d3.select(".chartTitle").html("");
     d3.select("#svg-area").html("");
+    // d3.select("#statistics").html("");
+
+    // **********************************************
+    // empty variables to fill later
+    var tickerList = []
+    var dataList = []
+    var dataDict = {}
+
+    var tableList = []
+    var tableDict = {}
+
+    // forEach loop to pull the tickers and differences
+    // between 7/2 actual opening and our predicted opening
+    data.forEach(function (data) {
+
+      // pulling closing 7/1 numbers
+      var closing71 = data.Closing_7_1_21
+
+      // pulling original numbers
+      var original = data.Opening_Original_7_2_21
+
+      // pulling predicted numbers
+      var predicted = data.Opening_Predicted_7_2_21
+
+      // finding the difference
+      // this is the difference in dollar amount **(comment 1 of 2)
+      // var difference = Math.abs(original - predicted).toFixed(2)
+      // this is the difference in % **(comment 1 of 2)
+      var difference = (((predicted-original)/original)*100).toFixed(2)
+      var tableDiff = (((predicted-closing71)/closing71)*100).toFixed(2)
+
+      // making sure the difference is numeric
+      difference = +Math.abs(difference)
+      tableDiff = +tableDiff
+
+      
+      // pushing the tickers into a list
+      tickerList.push(data.Ticker)
+      // pushing the diffrences into a list
+      dataList.push(difference)
+      tableList.push(tableDiff)
+    })
+    // for loop to put the two lists into a dictionary
+    for (var i = 0; i < dataList.length; i++) {
+      dataDict[tickerList[i]] = dataList[i]
+      tableDict[tickerList[i]] = tableList[i]
+    }
+    // pulling the key,value pairs from the dictionary
+    var dataDictKV = Object.entries(dataDict)
+    
+    
+    // stat on our findings
+    var dataMax = d3.max(dataList)
+    var dataMin = d3.min(dataList)
+    var dataMean = d3.mean(dataList)
+    var dataMedian = d3.median(dataList)
+
+    // console.log(dataDictNA)
+
+    var tableDictS = Object.keys(tableDict).map(function(key) {
+      return [key, tableDict[key]];
+    })
+
+    tableDictS.sort(function(first, second) {
+      return second[1] - first[1];
+    })
+
+    tableDictSS = tableDictS.slice(0, 10)
+
+    console.log(tableDictSS)
+
+
+    // for loop to find the stats
+    // right now its just logging onto console
+    for (var i = 0; i < dataDictKV.length; i++) {
+      if (dataDictKV[i][1] === dataMax) {
+        var maxDiff = `Max Difference : ${dataDictKV[i][0]}  ${dataDictKV[i][1]}%`
+      }
+      if (dataDictKV[i][1] === dataMin) {
+        var minDiff = `Min Difference : ${dataDictKV[i][0]}  ${dataDictKV[i][1]}%`
+      }
+    }
+    // console loggin the info not needed in the for loop
+    var meanDiff = `Average Difference : ${dataMean.toFixed(2)}%`
+    var medianDiff = `Median Difference : ${dataMedian.toFixed(2)}%`
+
+    d3.select("#statistics")
+    .selectAll("ul")
+    .html(function(d) {
+      return `Overall stats on the difference between <br> the actual opening price vs predicted opening price 7/2/21 <br> (numbers are in percents) <br> <br> ${maxDiff} <br> ${minDiff} <br> ${meanDiff} <br> ${medianDiff}`
+  });
+
+
+
+    d3.select("tbody")
+      .selectAll("tr")
+      .data(tableDictSS)
+      .enter()
+      .append("tr")
+      .html(function(d) {
+        return `<td>${d[0]}</td><td>${d[1]}%</td>`;
+      });
+
+    // *********************************************************************************
+
+
+
+
 
     // selecting the Ticker dropdown menu
     var dropdownMenu2 = d3.select("#selDataset2");
@@ -119,8 +229,8 @@ d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
 
 
     // Define SVG area dimensions
-    var svgWidth = 1560;
-    var svgHeight = 750;
+    var svgWidth = 1500;
+    var svgHeight = 700;
 
     // Define the chart's margins as an object
     var margin = {
@@ -154,8 +264,8 @@ d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
 
     // console.log(filters);
     // Load data from forcepoints.csv
-    d3.csv("../Static/data/MLData3.csv").then(function (graphData) {
-      
+    d3.csv("./Static/data/MLData3.csv").then(function (graphData) {
+
 
       graphData = graphData.filter(function (row) {
         // run through all the filters, returning a boolean
@@ -171,7 +281,7 @@ d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
           );
         }, true);
       })
-    
+
 
 
       // Print the graphData NOW FILTERED According to var filters
@@ -206,22 +316,22 @@ d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
 
       // define the area
       var area = d3.area()
-        .x(function(d) { return xTimeScale(d.date); })
+        .x(function (d) { return xTimeScale(d.date); })
         .y0(chartHeight)
-        .y1(function(d) { return yLinearScale(d.opening); });
+        .y1(function (d) { return yLinearScale(d.opening); });
 
 
       var drawLine = d3.line()
         .x(data => xTimeScale(data.date))
         .y(data => yLinearScale(data.force));
 
-          // add the area
+      // add the area
       chartGroup.append("path")
-      .data([graphData])
-      .attr("class", "area")
-      // .attr("fill","red")
-      .attr("d", area);
-        
+        .data([graphData])
+        .attr("class", "area")
+        // .attr("fill","red")
+        .attr("d", area);
+
 
       // Append an SVG path and plot its points using the line function
       chartGroup.append("path")
@@ -232,7 +342,7 @@ d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
         .attr("stroke-width", "3")
         .attr("stroke", "red")
 
-      
+
 
       // Append an SVG group element to the chartGroup, create the left axis inside of it
       // y axis
@@ -275,7 +385,7 @@ d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
         .classed("active", true)
         .text("Opening Price");
 
-        // append circles
+      // append circles
       var circlesGroup = chartGroup.selectAll("circle")
         .data(graphData)
         .enter()
@@ -294,23 +404,23 @@ d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
       // Step 1: Initialize Tooltip
       var toolTip = d3.tip()
         .attr("class", "circletip")
-        .attr("stroke","yellow")
+        .attr("stroke", "yellow")
         .offset([80, -60])
-        .html(function(d) {
+        .html(function (d) {
           return (`<strong>Opening Price: ${d.opening} </strong> <hr> Date: ${dateFormatter(d.date)}`);
         })
-        
+
 
       // Step 2: Create the tooltip in chartGroup.
       chartGroup.call(toolTip);
 
       // Step 3: Create "mouseover" event listener to display tooltip
-      circlesGroup.on("mouseover", function(d) {
+      circlesGroup.on("mouseover", function (d) {
         toolTip.show(d, this)
 
       })
-      // Step 4: Create "mouseout" event listener to hide tooltip
-        .on("mouseout", function(d) {
+        // Step 4: Create "mouseout" event listener to hide tooltip
+        .on("mouseout", function (d) {
           toolTip.hide(d);
         });
 
@@ -341,10 +451,10 @@ d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
       }
     };
     Plotly.newPlot("candlestick", trace1, layOut)
-    
+
     // Info Box Work
     // calling the ML csv to match treemap numbers and colors
-    d3.csv("../Static/data/MLData3.csv").then((plotData, err) => {
+    d3.csv("./Static/data/MLData3.csv").then((plotData, err) => {
 
       // creating empy lists for data
       var infoBox = []
@@ -405,7 +515,7 @@ d3.json("../Static/data/Predicted_Info_2.json").then((data, err) => {
         .html(`% Change (May-June 2021) : ${RRavidiff}%`)
     })
 
-    d3.json("../Static/data/Predicted_Info_2.json").then((d7) => {
+    d3.json("./Static/data/Predicted_Info_2.json").then((d7) => {
       // console.log(d7)
 
       var staticLine = {}
