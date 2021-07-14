@@ -36,41 +36,59 @@
     <section class="row">
       <div class="col-md-2">
 
-      <!-- kevin's drop down -->
-      <select id="selDataset2" onchange="tickerChanged(this.value)">
-        <!-- <option value="">Select Ticker</option> -->
-      </select>
+        <!-- kevin's drop down -->
+        <select id="selDataset2" onchange="tickerChanged(this.value)">
+          <!-- <option value="">Select Ticker</option> -->
+        </select>
 
-      <select id="selDataset" onchange="sectorChanged(this.value)">
-        <option value="">Select Sector ()</option>
-      </select>
-    </div>
-    <!-- kevin's drop down end   -->
+        <select id="selDataset" onchange="sectorChanged(this.value)">
+          <option value="">Select Sector ()</option>
+        </select>
+      </div>
+      <!-- kevin's drop down end   -->
 
 
       <div class="col-md-8">
         <h1 id="main_title">SPX500 Insights</h1>
       </div>
-      <section class="row">
-        <div class="span10">
-        <div class="col-md-12" id="my_dataviz">
-        </div>
-      </div>
-        <div class="row">
-          <div class="col-md-6, peach">
-            <div id="candlestick"></div>
-          </div>
-        </div>
-        
-          <div class="col-md-6,">
-            <h4>
-              <div id="predictor"></div>
-          </div>
-        
-      </section>
     </section>
   </div>
+  <div class="container-flid">
+    <section class="row">
+      <div class="span6" style="float: none; margin: 0 auto; background-color: black;">
+        <div class="col-md-12" id="my_dataviz"></div>
+      </div>
+    </section>
   </div>
+  <div class="row">
+    <div class="col-md-8 peach">
+      <div id="candlestick"></div>
+    </div>
+
+    <div class="col-md-2">
+      <h4>
+        <div id="predictor"></div>
+    </div>
+  </div>
+  <p>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="chartTitle"></div>
+      <div id="svg-area"></div>
+    </div>
+  </div>
+  <p>
+  <div class="row">
+    <div class="col-md-12">
+      <div id="static"></div>
+    </div>
+  </div>
+  </section>
+
+
+  <!-- </div> -->
+
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="./Static/js/PlotlyCandle.js"></script>

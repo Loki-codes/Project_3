@@ -44,6 +44,41 @@ margin-right: 20px;
     height: 70px;
 }
 
+.chartTitle {
+    text-align: center;
+    color:rgb(190, 241, 190);
+}
+
+.area {
+    fill:red;
+    opacity: .10;
+  }
+
+.circletip {
+    position: absolute;
+    width: 100px;
+    height: 110px;
+    padding: 10px;
+    font: 12px sans-serif;
+    text-align: center;
+    color: black;
+    background: ivory;
+    border: 0;
+    border-radius: 10px;
+  }
+
+.axisTan line{
+    stroke: tan;
+  }
+  
+  .axisTan path{
+    stroke: tan;
+  }
+  
+  .axisTan text{
+    fill: tan;
+  }  
+
 .form-check{
     text-align: left;
     font-size: 15px;
@@ -60,6 +95,9 @@ margin-right: 20px;
     margin-right: 20px;
 }
 
+#candlestick{
+    position: relative;
+}
 
 body{
     background-color: rgb(53, 54, 58);
@@ -131,7 +169,7 @@ h2{
 }
 
 h4{
-    font-size: xx-large;
+    font-size: medium;
     padding-left: 20px;
 }
 
