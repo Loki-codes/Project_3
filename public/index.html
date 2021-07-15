@@ -68,6 +68,8 @@
     <div class="col-md-2">
       <h4>
         <div id="predictor"></div>
+        <div id="box2"></div>
+        <div id="box3"></div>
     </div>
   </div>
   <p>
@@ -79,27 +81,32 @@
   </div>
   <p>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-11">
       <div id="static"></div>
     </div>
   </div>
   <p>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-3">
       <div id="statistics">
         <ul class="listList"></ul>
       </div>
     </div>
-    <div class="col-md-6">
-      <div id="ranked">
-        <table class="table table-striped listList">
-          <thead>
-              <th class="listList" >Top ten gainers from close 7/1 to predicted open 7/2</th>
-              <tr><th><strong>Ticker</strong></th><th><strong>Increase %</strong></th></tr>
-          </thead>
-          <tbody></tbody>
+    <div class="col-md-3 ranked" >
+      
+        <ul class="listList"></ul>
+        <table class="table listList">
+          <tbody id="top10"></tbody>
+      </table>  
+    
+    </div>
+    <div class="col-md-3 ranked2">
+      
+        <table class="table listList" style="background-color: black;">
+          <ul class="listList"></ul>
+          <tbody id="bottom10"></tbody>
       </table>
-      </div>
+      
     </div>
   </div>
   </section>

@@ -46,11 +46,12 @@ margin-right: 20px;
 
 .chartTitle {
     text-align: center;
-    color:rgb(190, 241, 190);
+    color:ivory;
+    font-size: x-large;
 }
 
 .area {
-    fill:red;
+    fill:blue;
     opacity: .10;
   }
 
@@ -101,7 +102,22 @@ margin-right: 20px;
 }
 
 #candlestick{
+    margin-left: 70px;
     position: relative;
+}
+
+#static{
+    margin-left: 70px;
+    position: relative;
+}
+
+.ranked{
+    margin-top:0px;
+    color:white;
+}
+
+.col-md-3{
+    left:200px;
 }
 
 body{
@@ -174,8 +190,8 @@ h2{
 }
 
 h4{
-    font-size: medium;
-    padding-left: 20px;
+    font-size: large;
+    padding-left: 50px;
 }
 
 #candle{
