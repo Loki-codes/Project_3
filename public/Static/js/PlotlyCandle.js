@@ -99,6 +99,8 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
     d3.select("#predictor").html("");
     d3.select(".chartTitle").html("");
     d3.select("#svg-area").html("");
+    d3.select("#box2").html("");
+    d3.select("#box3").html("");
 
     // this work is for the 3 info boxes at the bottom
     // empty variables to fill later
