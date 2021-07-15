@@ -1,10 +1,6 @@
 d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
   if (err) throw err;
 
-
-  // making sure something shows up on console
-  console.log("RDBC")
-
   // This is work for the sector dropwdown
   // create empty list for sectors
   var sectorNames = []
@@ -60,7 +56,7 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
     // filter the entire dataset and create an array of stocks in the sector chosen
     var filterArray = data.filter(d1 => d1.sector === dataset);
 
-    // creating empty dictionary for filtered stock tickers and names
+    // creating dictionary for filtered stock tickers and names
     var tickerNames2 = { "": "Select Ticker" }
 
     // loop to pull those tickers and names
@@ -71,7 +67,7 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
     // clearing the ticker dropdown
     d3.select("#selDataset2").html("")
 
-    // repopulating the ticker dropdown on that sector(all if none)
+    // repopulating the ticker dropdown on that sector(all stocks if "select sector" is chosen)
     if (dataset === "") {
       d3.select("#selDataset2")
         .selectAll("#JordanBelfort")
@@ -95,8 +91,6 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
   //calling function when a Ticker is chosen
   d3.selectAll("#selDataset2").on("change", tickerChanged);
 
-
-
   function tickerChanged() {
     // clearing visuals to be replaced
     d3.select("#my_dataviz").html("");
@@ -105,90 +99,79 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
     d3.select("#predictor").html("");
     d3.select(".chartTitle").html("");
     d3.select("#svg-area").html("");
-    // d3.select("#ranked").html("");
 
-    // **********************************************
+    // this work is for the 3 info boxes at the bottom
     // empty variables to fill later
     var tickerList = []
     var dataList = []
     var dataDict = {}
-
     var tableList = []
     var tableDict = {}
 
-    // forEach loop to pull the tickers and differences
-    // between 7/2 actual opening and our predicted opening
+    // forEach loop to pull the tickers and differences between 7/2 actual opening and our predicted opening
     data.forEach(function (data) {
 
       // pulling closing 7/1 numbers
-      var closing71 = data.Closing_7_1_21
-
+      var closing7_1 = data.Closing_7_1_21
       // pulling original numbers
       var original = data.Opening_Original_7_2_21
-
       // pulling predicted numbers
       var predicted = data.Opening_Predicted_7_2_21
 
-      // finding the difference
-      // this is the difference in dollar amount **(comment 1 of 2)
+      // finding the difference between original and predicted for 7/2
+      //    this is the difference in dollar amount **(comment 1 of 2)
       // var difference = Math.abs(original - predicted).toFixed(2)
-      // this is the difference in % **(comment 1 of 2)
+      //    this is the difference in % **(comment 1 of 2)
       var difference = (((predicted - original) / original) * 100).toFixed(2)
-      var tableDiff = (((predicted - closing71) / closing71) * 100).toFixed(2)
 
-      // making sure the difference is numeric
+      // finding difference between closing 7/1 to our predicted open 7/2
+      var tableDiff = (((predicted - closing7_1) / closing7_1) * 100).toFixed(2)
+
+      // making sure the differences are numeric and absolute value if needed
       difference = +Math.abs(difference)
       tableDiff = +tableDiff
 
-
       // pushing the tickers into a list
       tickerList.push(data.Ticker)
-      // pushing the diffrences into a list
+      // pushing the diffrences into lists
       dataList.push(difference)
       tableList.push(tableDiff)
     })
-    // for loop to put the two lists into a dictionary
+
+    // for loop to put each of the needed list combinations into dictionaries
     for (var i = 0; i < dataList.length; i++) {
       dataDict[tickerList[i]] = dataList[i]
       tableDict[tickerList[i]] = tableList[i]
     }
-    // pulling the key,value pairs from the dictionary
+
+    // pulling the key,value pairs for the model overview
     var dataDictKV = Object.entries(dataDict)
 
-
-    // stat on our findings
+    // some basic mathmatical stats on our findings
     var dataMax = d3.max(dataList)
     var dataMin = d3.min(dataList)
     var dataMean = d3.mean(dataList)
     var dataMedian = d3.median(dataList)
 
-    // console.log(dataDictNA)
-
+    // pulling, sorting, and slicing for the top ten gainers table
     var tableDictStop10 = Object.keys(tableDict).map(function (key) {
       return [key, tableDict[key]];
     })
-
     tableDictStop10.sort(function (first, second) {
       return second[1] - first[1];
     })
-
     tableDictSStop10 = tableDictStop10.slice(0, 10)
 
+    // pulling, sorting, and slicing for the top ten losers table
     var tableDictSbottom10 = Object.keys(tableDict).map(function (key) {
       return [key, tableDict[key]];
     })
-
     tableDictSbottom10.sort(function (first, second) {
       return first[1] - second[1];
     })
-
     tableDictSSbottom10 = tableDictSbottom10.slice(0, 10)
 
-    // console.log(tableDictSS)
-
-
-    // for loop to find the stats
-    // right now its just logging onto console
+    // for loop to find which ticker has the max and min differences and storing into an html formatted variable
     for (var i = 0; i < dataDictKV.length; i++) {
       if (dataDictKV[i][1] === dataMax) {
         var maxDiff = `Ticker that has the maximum Difference : <br> ${dataDictKV[i][0]}  ${dataDictKV[i][1]}%`
@@ -197,10 +180,11 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         var minDiff = `Ticker that has the minimum Difference : <br> ${dataDictKV[i][0]}  ${dataDictKV[i][1]}%`
       }
     }
-    // console loggin the info not needed in the for loop
+    // storing the mean and median into an html formatted variable
     var meanDiff = `Overall average Difference : <br> ${dataMean.toFixed(2)}%`
     var medianDiff = `Overall median Difference : <br> ${dataMedian.toFixed(2)}%`
 
+    // creating the model overview table and puttin in the stats we found plus the machine learning score
     d3.select("#statistics")
       .selectAll("ul")
       .html(function (d) {
@@ -219,18 +203,12 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
       0.9954598958296442 <br></center>`
       });
 
+    // creating the top ten gainers table
     d3.select(".ranked")
       .selectAll("ul")
       .html(function (d) {
         return `<br><h3><center> Top 10 gainers <br>from close 7/1 to predicted open 7/2 </center></h3>`
       });
-
-    d3.select(".ranked2")
-      .selectAll("ul")
-      .html(function (d) {
-        return `<br><h3><center> Top 10 losers <br>from close 7/1 to predicted open 7/2 </center></h3><p>`
-      });
-
 
     d3.select("#top10")
       .selectAll("tr")
@@ -241,6 +219,14 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         return `<td>${d[0]}</td><td>${d[1]}%</td>`;
       });
 
+    // creating the top ten losers table
+    d3.select(".ranked2")
+      .selectAll("ul")
+      .html(function (d) {
+        return `<br><h3><center> Top 10 losers <br>from close 7/1 to predicted open 7/2 </center></h3><p>`
+      });
+
+
     d3.select("#bottom10")
       .selectAll("tr")
       .data(tableDictSSbottom10)
@@ -250,38 +236,29 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         return `<td>${d[0]}</td><td>${d[1]}%</td>`;
       });
 
-    // *********************************************************************************
-
-
-
-
-
+    // finding the ticker from the ticker dropdown selection
     // selecting the Ticker dropdown menu
     var dropdownMenu2 = d3.select("#selDataset2");
     // Assign the value of the dropdown menu option to a variable
     var dataset2 = dropdownMenu2.property("value");
     // filter the entire dataset and create an array of the Ticker chosen
     var filterArray2 = data.filter(d2 => d2.Ticker === dataset2);
-
+    // this variable is equal to the ticker chosen 
     var tickerForD3 = filterArray2[0].Ticker
 
+    // this work is for the 18-month D3 line graph
+    // making the title header
     d3.select(".chartTitle").append("text")
       .attr("x", "50")
       .attr("y", "50")
       .html(`${tickerForD3} Opening stock prices from Jan,2 2020 - July,1 2021`)
-
 
     // Define SVG area dimensions
     var svgWidth = 1500;
     var svgHeight = 700;
 
     // Define the chart's margins as an object
-    var margin = {
-      top: 60,
-      right: 60,
-      bottom: 60,
-      left: 160
-    };
+    var margin = { top: 60, right: 60, bottom: 60, left: 160 };
 
     // Define dimensions of the chart area
     var chartWidth = svgWidth - margin.left - margin.right;
@@ -300,15 +277,11 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
     // Configure a parseTime function which will return a new Date object from a string
     var parseTime = d3.timeParse('%Y-%m-%d');
 
-
-
-    // this will filter the ticket, still hard coded but needs to come from the user's input --- IMPORTANT TO FIX
+    // this will filter the ticker
     var filters = { 'Ticker': [tickerForD3] };
 
-    // console.log(filters);
-    // Load data from forcepoints.csv
+    // Load data from MLData3.csv
     d3.csv("./Static/data/MLData3.csv").then(function (graphData) {
-
 
       graphData = graphData.filter(function (row) {
         // run through all the filters, returning a boolean
@@ -325,70 +298,52 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         }, true);
       })
 
-
-
-      // Print the graphData NOW FILTERED According to var filters
-
-
-      // Format the date and cast the force value to a number
+      // Format the date and cast the opening value to a number
       graphData.forEach(function (data) {
         data.date = parseTime(data.date);
-        data.force = +data.opening;
+        data.opening = +data.opening;
       });
 
-
-
-
       // Configure a time scale
-      // d3.extent returns the an array containing the min and max values for the property specified
       var xTimeScale = d3.scaleTime()
         .domain(d3.extent(graphData, data => data.date))
         .range([0, chartWidth]);
 
       // Configure a linear scale with a range between the chartHeight and 0
       var yLinearScale = d3.scaleLinear()
-        .domain([0, d3.max(graphData, data => data.force)])
+        .domain([0, d3.max(graphData, data => data.opening)])
         .range([chartHeight, 0]);
 
-      // Create two new functions passing the scales in as arguments
-      // These will be used to create the chart's axes
+      // Create two new axis functions passing the scales in as arguments
       var bottomAxis = d3.axisBottom(xTimeScale);
       var leftAxis = d3.axisLeft(yLinearScale);
 
-      // Configure a line function which will plot the x and y coordinates using our scales
-
-      // define the area
+      // define the area to be filled in
       var area = d3.area()
         .x(function (d) { return xTimeScale(d.date); })
         .y0(chartHeight)
         .y1(function (d) { return yLinearScale(d.opening); });
 
-
+      // Configure a line function which will plot the x and y coordinates using our scales
       var drawLine = d3.line()
         .x(data => xTimeScale(data.date))
-        .y(data => yLinearScale(data.force));
+        .y(data => yLinearScale(data.opening));
 
-      // add the area
+      // add the area to the graph
       chartGroup.append("path")
         .data([graphData])
         .attr("class", "area")
-        // .attr("fill","red")
         .attr("d", area);
-
 
       // Append an SVG path and plot its points using the line function
       chartGroup.append("path")
-        // The drawLine function returns the instructions for creating the line for graphData
         .attr("d", drawLine(graphData))
         .attr("class", "x axis")
         .style("fill", "none")
         .attr("stroke-width", "3")
         .attr("stroke", "blue")
 
-
-
       // Append an SVG group element to the chartGroup, create the left axis inside of it
-      // y axis
       chartGroup.append("g")
         .classed("axis", true)
         .attr("class", "axisTan")
@@ -396,8 +351,6 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         .call(leftAxis);
 
       // Append an SVG group element to the chartGroup, create the bottom axis inside of it
-      // Translate the bottom axis to the bottom of the page
-      // x axis
       chartGroup.append("g")
         .classed("axis", true)
         .attr("class", "axisTan")
@@ -405,24 +358,24 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         .attr("stroke", "ivory")
         .call(bottomAxis);
 
+      // x-axis label
       var xLabelsGroup = chartGroup.append("g")
         .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 20})`);
       xLabelsGroup.append("text")
         .attr("x", 0)
         .attr("y", 20)
-        .attr("value", "poverty") // value to grab for event listener
         .attr("stroke", "ivory")
         .attr("fill", "ivory")
         .classed("active", true)
         .text("Months");
 
+      // y-axis label
       var yLabelsGroup = chartGroup.append("g")
         .attr("transform", "rotate(-90)");
       yLabelsGroup.append("text")
         .attr("x", 0 - (chartHeight / 2))
         .attr("y", 75 - margin.left)
         .attr("dy", "1em")
-        .attr("value", "healthcare")
         .attr("stroke", "ivory")
         .attr("fill", "ivory")
         .classed("active", true)
@@ -434,15 +387,16 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         .enter()
         .append("circle")
         .attr("cx", d => xTimeScale(d.date))
-        .attr("cy", d => yLinearScale(d.force))
+        .attr("cy", d => yLinearScale(d.opening))
         .attr("r", "1")
         .attr("fill", "gold")
         .attr("stroke-width", "2")
         .attr("stroke", "white")
         .style("cursor", "pointer")
 
+      // creating tooltip
       // Date formatter to display dates nicely
-      var dateFormatter = d3.timeFormat("%d-%b");
+      var dateFormatter = d3.timeFormat("%Y-%d-%b");
 
       // Step 1: Initialize Tooltip
       var toolTip = d3.tip()
@@ -453,14 +407,12 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
           return (`<strong>Opening Price: ${d.opening} </strong> <hr> Date: ${dateFormatter(d.date)}`);
         })
 
-
       // Step 2: Create the tooltip in chartGroup.
       chartGroup.call(toolTip);
 
       // Step 3: Create "mouseover" event listener to display tooltip
       circlesGroup.on("mouseover", function (d) {
         toolTip.show(d, this)
-
       })
         // Step 4: Create "mouseout" event listener to hide tooltip
         .on("mouseout", function (d) {
@@ -475,23 +427,17 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
     localStorage.setItem("array", filterArray2);
 
     // Plotly Predicted plot
-    // pulling the key,value pairs
+    // pulling the key,value pairs (FA2 stands for filterArray2 - made it a small name to condense code on next lines)
     var FA2 = Object.entries(filterArray2[0])
     // creating plot with opening values
     var x = [FA2[3][0], FA2[8][0], FA2[13][0], FA2[18][0], FA2[24][0]]
     var y = [FA2[3][1], FA2[8][1], FA2[13][1], FA2[18][1], FA2[24][1]]
+
+    // plot it
     var trace1 = [{ x: x, y: y, type: "line" }]
     var layOut = {
-      title: `${filterArray2[0].name} (${filterArray2[0].Ticker}) Predicted Opening Price`,
-      xaxis: {
-        title: "Date",
-        automargin: true
-      },
-      yaxis: {
-        title: "Opening Price",
-        autorange: true,
-        type: "linear"
-      }
+      title: `${filterArray2[0].name} (${filterArray2[0].Ticker}) Predicted Opening Price`, xaxis: { title: "Date", automargin: true },
+      yaxis: { title: "Opening Price", autorange: true, type: "linear" }
     };
     Plotly.newPlot("candlestick", trace1, layOut)
 
@@ -499,7 +445,7 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
     // calling the ML csv to match treemap numbers and colors
     d3.csv("./Static/data/MLData3.csv").then((plotData) => {
 
-      // creating empy lists for data
+      // creating empty lists for data
       var infoBox = []
       var percChange = []
 
@@ -513,8 +459,8 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
             percChange.push(d4.closing)
           }
         }
-
       })
+
       // doing the percent change calc and storing into a variable
       var RAVIdiff = ((percChange[1] - percChange[0]) / percChange[0]) * 100
       // pushing that into another list for correct structure
@@ -532,7 +478,7 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         .attr("height", height)
         .attr("width", width);
 
-      // Append a rectangle and calling data
+      // Append a rectangle and call data
       svg.append("rect")
         .data(infoBox)
         .attr("width", width)
@@ -561,18 +507,15 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
     })
 
     d3.json("./Static/data/Predicted_Info_2.json").then((d7) => {
-      // console.log(d7)
-      // for (var i=0;i<d7.length;i++){
+
+      // this is work for the 2 boxes showing the difference in 7/2 actual opening price vs our predicted price(lightblue and tan)
       var box2 = d7.filter(d => d.Ticker === tickerForD3)
-      // var box3 = d7[i].Opening_Predicted_7_2_21
-      // }
-      console.log(box2[0].Opening_Original_7_2_21)
 
       // variables for height/width of info box
       var heightH = 150
       var widthH = 350
 
-
+      // adding original opening price box (tan)
       var svg2 = d3.select("#box2")
         .append("svg")
         .attr("height", heightH)
@@ -586,7 +529,6 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         .attr("y", 0)
         .attr("stroke", "white")
         .attr("stroke-width", 2)
-        // if condition to color the box to match the treemap color for that stock
         .attr("fill", "tan")
 
       svg2.append("text")
@@ -595,8 +537,7 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         .attr("y", heightH / 1.8)
         .html(`Original Opening 7/2/21 : ${box2[0].Opening_Original_7_2_21.toFixed(2)}`)
 
-      // *******
-
+      // adding predicted opening price box (tan)
       var svg3 = d3.select("#box3")
         .append("svg")
         .attr("height", heightH)
@@ -610,7 +551,6 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         .attr("y", 0)
         .attr("stroke", "white")
         .attr("stroke-width", 2)
-        // if condition to color the box to match the treemap color for that stock
         .attr("fill", "lightblue")
 
       svg3.append("text")
@@ -619,12 +559,13 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
         .attr("y", heightH / 1.8)
         .html(`Predicted Opening 7/2/21 : ${box2[0].Opening_Predicted_7_2_21.toFixed(2)}`)
 
-
-      // console.log(d7)
-
+      // this is work for the static line that shows all stocks relatively
+      // empty variables
       var staticLine = {}
       var percentChange = []
       var lineTicker = []
+
+      // nested for loops to create a dictionary of the ticker and their percent change from opening 6/28 - closing 7/1
       for (var i = 0; i < d7.length; i++) {
         var percentChange3 = ((d7[i].Closing_7_1_21 - d7[i].Opening_6_28_21) / d7[i].Opening_6_28_21) * 100
         percentChange3 = +percentChange3.toFixed(2)
@@ -634,19 +575,45 @@ d3.json("./Static/data/Predicted_Info_2.json").then((data, err) => {
           staticLine[lineTicker[k]] = percentChange[k]
         }
       }
+
+      // creating a variable that holds the horizontal line point for the ticker chosen
       var horizontalLine = staticLine[tickerForD3]
-
-
-      // horizontalLine.push(abc)
-      console.log(horizontalLine)
 
       //STATIC LINE
       var staticLineData = [{ x: lineTicker, y: percentChange, type: "line" }];
       //STATIC LINE
-      var staticLineLayOut10 = { title: `Percentage change from 6/28/21 Open - 7/1/21 Close`, yaxis: { title: "4 Days Difference" }, shapes: [{ type: 'line', x0: tickerForD3, y0: 0, x1: tickerForD3, yref: 'paper', y1: 1, line: { color: 'red', width: .7 } }, { type: 'line', x0: 0, y0: horizontalLine, x1: 1, xref: 'paper', y1: horizontalLine, line: { color: '#971616', width: .7 } }] };
-      //plotting the static plots
-      Plotly.newPlot("static", staticLineData, staticLineLayOut10); //static
-    })
+      var staticLineLayOut10 = {
+        title: `Percentage change from 6/28/21 Open - 7/1/21 Close`,
+        yaxis: {
+          title: "4 Days Difference"
+        },
+        shapes: [{
+          type: 'line',
+          x0: tickerForD3,
+          y0: 0,
+          x1: tickerForD3,
+          yref: 'paper',
+          y1: 1,
+          line: {
+            color: 'red',
+            width: .7
+          }
+        }, {
+          type: 'line',
+          x0: 0,
+          y0: horizontalLine,
+          x1: 1,
+          xref: 'paper',
+          y1: horizontalLine,
+          line: {
+            color: '#971616',
+            width: .7
+          }
+        }]
+      };
 
+      //plotting the static plots
+      Plotly.newPlot("static", staticLineData, staticLineLayOut10);
+    })
   }
-})
+});
